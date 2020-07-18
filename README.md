@@ -1,6 +1,14 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Tree Map Diagram of Video Game Sales
 
-## Available Scripts
+A React-D3.js tree map diagram application of video game sales completed for the freecodecamp data visualization curriculum. I can use any mix of HTML, JavaScript, CSS, Bootstrap, SASS, React, Redux, D3.js, and jQuery to complete this project.
+
+**Final Project:** [https://peterhuang.net/projects/treemap-diagram-video-game-sales/](https://peterhuang.net/projects/treemap-diagram-video-game-sales/)
+
+**User Story #1:** Shows the video game sales from a remote JSON source file.
+
+**User Story #2:** Shows additional video game information on hover
+
+## Getting Started
 
 In the project directory, you can run:
 
@@ -37,32 +45,20 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+## Built With
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- [Bootstrap](http://www.dropwizard.io/1.0.2/docs/) - The CSS framework
+- [React](https://reactjs.org/) - JavaScript library
+- [Data-Drive Documents](https://d3js.org/) - JavaScript library for producing dynamic, interactive data visualizations in web browsers
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Authors
 
-### Code Splitting
+- **Peter Huang** - Principal developer - [Portfolio](https://www.peterhuang.net/)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## License
 
-### Analyzing the Bundle Size
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+## Acknowledgments
 
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- [Hugo Giraudel](https://hugogiraudel.com/) - Prefix Mixin in Sass

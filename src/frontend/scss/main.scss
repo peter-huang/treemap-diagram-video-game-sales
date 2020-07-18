@@ -1,0 +1,106 @@
+// Mixin to prefix a property
+//// @author Hugo Giraudel
+//// @param {String} $property 			- Property name
+//// @param {*} $value 					    - Property value
+//// @param {List} $prefixes (())   - List of prefixes to print
+
+@mixin prefix($property, $value) {
+  $prefixes: webkit moz ms o;
+
+  @each $prefix in $prefixes {
+    #{'-' + $prefix + '-' + $property}: #{$value};
+  }
+  // Output standard non-prefixed declaration
+  #{$property}: #{$value};
+}
+
+// Mixin to prefix animation
+//// @param {String} $animation-name - Name of the animation
+@mixin keyframes($animation-name) {
+  @-webkit-keyframes #{$animation-name} {
+    @content;
+  }
+
+  @-moz-keyframes #{$animation-name} {
+    @content;
+  }
+
+  @-ms-keyframes #{$animation-name} {
+    @content;
+  }
+
+  @-o-keyframes #{$animation-name} {
+    @content;
+  }
+
+  @keyframes #{$animation-name} {
+    @content;
+  }
+}
+
+// Mixin to prefix a property
+//// @author Hugo Giraudel
+//// @param {String} $property 			- Property name
+//// @param {*} $value 					    - Property value
+//// @param {List} $prefixes (())   - List of prefixes to print
+
+@mixin prefix($property, $value) {
+  $prefixes: webkit moz ms o;
+
+  @each $prefix in $prefixes {
+    #{'-' + $prefix + '-' + $property}: #{$value};
+  }
+  // Output standard non-prefixed declaration
+  #{$property}: #{$value};
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: lightblue;
+}
+
+#app {
+  border: 0px red solid;
+  height: 100%;
+}
+.credits {
+  color: #023e8a;
+  &:hover {
+    text-decoration: none;
+    color: #d00000;
+  }
+}
+#tooltip {
+  position: absolute;
+  z-index: 9999;
+  background-color: #4a4e69;
+  font-size: 0.75em;
+  color: white;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  text-align: left;
+  opacity: 0.9;
+
+  @include prefix("box-shadow", "2px 2px 10px 0px rgba(0,0,0,0.75)");
+}
+
+#treemap-container {
+  position: relative;
+  border: 5px purple solid;
+}
+
+#treemap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  background-color: white;
+  @include prefix("box-shadow", "0px 10px 40px -15px rgba(0,0,0,0.75)");
+
+  padding: 1em;
+  @include prefix("transform", "translate(-50%, -50%)");
+}
