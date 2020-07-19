@@ -7,21 +7,21 @@ import { tree } from "d3";
 const GAME_DATA =
   "https://cdn.freecodecamp.org/testable-projects-fcc/data/tree_map/video-game-sales-data.json";
 
-const COLORS = [
+let COLORS = [
   "#caf0f8",
   "#ddd8c4",
-  "#a3c9a8",
+  "#16db93",
   "#84b59f",
   "#69a297",
-  "#50808e",
+  "#048ba8",
   "#ff9f1c",
   "#ffbf69",
-  "#cbf3f0",
-  "#2ec4b6",
+  "#c8553d",
+  "#e63946",
   "#ff99c8",
+  "#efea5a",
   "#fcf6bd",
-  "#fcf6bd",
-  "#d0f4de",
+  "#8338ec",
   "#a9def9",
   "#4cc9f0",
   "#3c6e71",
@@ -75,18 +75,24 @@ function TreeMap({ data }) {
   }, [data]);
 
   const drawTreeMap = (data) => {
+    // set up color array
+    for (let i = 0; i < data.children.length; i++) {
+      const temp = COLORS[i];
+      COLORS[i] = [data.children[i].name, temp];
+    }
+
     const padding = {
-      top: 25,
-      right: 25,
-      bottom: 25,
-      left: 25,
+      top: 0,
+      right: 50,
+      bottom: 0,
+      left: 50,
     };
 
     const treePadding = 2;
 
     const dim = {
-      width: 700 + padding.right + padding.left,
-      height: 500 + padding.top + padding.bottom,
+      width: 700 - padding.right - padding.left,
+      height: 500 - padding.top - padding.bottom,
     };
 
     // Tooltip
@@ -131,19 +137,23 @@ function TreeMap({ data }) {
       .data(root.leaves())
       .enter()
       .append("rect")
+      .attr("class", "tile")
       .attr("fill", (d, i) => {
-        //console.log(d.parent.data.name);
-        return "blue";
+        const g = d.parent.data.name;
+
+        for (let i = 0; i < COLORS.length; i++) {
+          if (COLORS[i][0] === g) {
+            return COLORS[i][1];
+          }
+        }
       })
       .attr("x", (d) => d.x0)
       .attr("y", (d) => d.y0)
       .attr("width", (d) => d.x1 - d.x0)
       .attr("height", (d) => d.y1 - d.y0)
-      .attr("data-name", (d) => {
-        console.log(d.parent.children);
-      })
-      .attr("data-category", "")
-      .attr("data-value", "");
+      .attr("data-name", (d) => d.data.name)
+      .attr("data-category", (d) => d.data.category)
+      .attr("data-value", (d) => d.data.value);
   };
 
   return (
