@@ -23,7 +23,7 @@ let COLORS = [
   "#fcf6bd",
   "#8338ec",
   "#a9def9",
-  "#4cc9f0",
+  "#80b918",
   "#3c6e71",
   "#74c69d",
 ];
@@ -206,14 +206,15 @@ function TreeMap({ data }) {
         tooltip.transition().duration(100).style("opacity", 0);
       });
 
+    // Text
     tileView
       .append("text")
-      .attr("x", (d) => d.x0 + 5)
-      .attr("y", (d) => d.y0 - 5)
+      .attr("x", (d) => d.x0)
+      .attr("y", (d) => d.y0 + 8)
       .attr("width", (d) => d.x1 - d.x0)
       .attr("height", (d) => d.y1 - d.y0)
       .style("font-size", "0.5em")
-      .text((d) => d.data.name);
+      .html((d) => d.data.name);
 
     const legend = svg
       .append("g")
