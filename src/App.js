@@ -81,18 +81,27 @@ function TreeMap({ data }) {
       COLORS[i] = [data.children[i].name, temp];
     }
 
+    const legendBox = 20;
+
+    const paddingFactor = {
+      top: 1,
+      right: 1,
+      bottom: 8,
+      left: 1,
+    };
+
     const padding = {
-      top: 0,
+      top: 50,
       right: 50,
-      bottom: 0,
+      bottom: paddingFactor.bottom * legendBox,
       left: 50,
     };
 
     const treePadding = 2;
 
     const dim = {
-      width: 700 - padding.right - padding.left,
-      height: 500 - padding.top - padding.bottom,
+      width: 1000 + padding.right + padding.left,
+      height: 500 + padding.top + padding.bottom,
     };
 
     // Tooltip
@@ -114,16 +123,23 @@ function TreeMap({ data }) {
       .text("Top 100 Most Sold Video Games Grouped by Platform");
 
     const treemap = d3.treemap();
-    treemap.size([dim.width, dim.height]).paddingOuter(treePadding);
+    treemap
+      .size([dim.width, dim.height - padding.bottom])
+      .paddingOuter(treePadding)
+      .paddingInner(treePadding);
 
     const root = d3.hierarchy(data);
 
-    //console.log(data[1].children);
     root.sum((d) => {
       return d.value;
     });
+    // .sort((a, b) => b.value - a.value);
 
     treemap(root);
+
+    const xScale = d3.scaleLinear();
+    xScale.domain([]);
+    xScale.range([]);
 
     // SVG setup
     const svg = d3
@@ -132,10 +148,18 @@ function TreeMap({ data }) {
       .attr("width", dim.width)
       .attr("height", dim.height);
 
-    svg
-      .selectAll("rect")
+    let tileView = svg
+      .selectAll("g")
       .data(root.leaves())
       .enter()
+      .append("g")
+      .attr("class", "tile-container")
+      .attr("x", (d) => d.x0)
+      .attr("y", (d) => d.y0)
+      .attr("width", (d) => d.x1 - d.x0)
+      .attr("height", (d) => d.y1 - d.y0);
+
+    tileView
       .append("rect")
       .attr("class", "tile")
       .attr("fill", (d, i) => {
@@ -153,7 +177,122 @@ function TreeMap({ data }) {
       .attr("height", (d) => d.y1 - d.y0)
       .attr("data-name", (d) => d.data.name)
       .attr("data-category", (d) => d.data.category)
-      .attr("data-value", (d) => d.data.value);
+      .attr("data-value", (d) => d.data.value)
+      .on("mouseover", (d, i) => {
+        let content =
+          "Name: " +
+          d.data.name +
+          "<br />" +
+          "Category: " +
+          d.data.category +
+          "<br />" +
+          "Value: " +
+          d.data.value;
+        tooltip.transition().duration(100).style("opacity", 0.9);
+        let pos = d3
+          .select(document.getElementsByClassName("tile")[i])
+          .node()
+          .getBoundingClientRect();
+        let x = pos.x - window.pageXOffset + 10 + "px";
+        let y = pos.y - window.pageYOffset + 10 + "px";
+        tooltip
+          .html(content)
+          .style("left", x)
+          .style("top", y)
+          .style("opacity", 0.9)
+          .attr("data-value", d.data.value);
+      })
+      .on("mouseout", (d) => {
+        tooltip.transition().duration(100).style("opacity", 0);
+      });
+
+    tileView
+      .append("text")
+      .attr("x", (d) => d.x0 + 5)
+      .attr("y", (d) => d.y0 - 5)
+      .attr("width", (d) => d.x1 - d.x0)
+      .attr("height", (d) => d.y1 - d.y0)
+      .style("font-size", "0.5em")
+      .text((d) => d.data.name);
+
+    const legend = svg
+      .append("g")
+      .attr("id", "legend")
+      .attr(
+        "transform",
+        "translate(" +
+          (dim.width / 3 - padding.left / 3) +
+          ", " +
+          (dim.height - padding.bottom) +
+          ")"
+      );
+
+    for (let i = 0; i < COLORS.length; i++) {
+      if (i >= 0 && i < 6) {
+        legend
+          .append("rect")
+          .attr("class", "legend-item")
+          .attr("width", legendBox)
+          .attr("height", legendBox)
+          .attr("x", 0)
+          .attr("y", legendBox * (i + 1))
+          .style("fill", COLORS[i][1])
+          .style("stroke-width", 1)
+          .style("stroke", "black");
+
+        legend
+          .append("text")
+          .attr("class", "legend-item-text")
+          .attr("width", legendBox)
+          .attr("height", legendBox)
+          .style("font-size", "1em")
+          .attr("x", legendBox * 2)
+          .attr("y", legendBox * (i + 1) + legendBox / 1.25)
+          .text(COLORS[i][0]);
+      } else if (i >= 6 && i < 12) {
+        legend
+          .append("rect")
+          .attr("class", "legend-item")
+          .attr("width", legendBox)
+          .attr("height", legendBox)
+          .attr("x", padding.right * 3)
+          .attr("y", legendBox * (i - 5))
+          .style("fill", COLORS[i][1])
+          .style("stroke-width", 1)
+          .style("stroke", "black");
+
+        legend
+          .append("text")
+          .attr("class", "legend-item-text")
+          .attr("width", legendBox)
+          .attr("height", legendBox)
+          .style("font-size", "1em")
+          .attr("x", padding.right * 3 + legendBox * 2)
+          .attr("y", legendBox * (i - 5) + legendBox / 1.25)
+          .text(COLORS[i][0]);
+      } else {
+        legend
+          .append("rect")
+          .attr("class", "legend-item")
+          .attr("width", legendBox)
+          .attr("height", legendBox)
+          .attr("x", padding.right * 6)
+          .attr("y", legendBox * (i - 11))
+          .style("fill", COLORS[i][1])
+          .style("stroke-width", 1)
+          .style("stroke", "black");
+
+        legend
+          .append("text")
+          .attr("class", "legend-item-text")
+          .attr("width", legendBox)
+          .attr("height", legendBox)
+          .style("font-size", "1em")
+          .attr("x", padding.right * 6 + legendBox * 2)
+          .attr("y", legendBox * (i - 11) + legendBox / 1.25)
+          .text(COLORS[i][0]);
+      }
+    }
   };
 
   return (

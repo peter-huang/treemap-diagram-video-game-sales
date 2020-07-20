@@ -82,7 +82,7 @@ body {
   color: white;
   padding: 0.5em;
   border-radius: 0.5em;
-  text-align: left;
+  text-align: center;
   opacity: 0.9;
 
   @include prefix("box-shadow", "2px 2px 10px 0px rgba(0,0,0,0.75)");
@@ -112,5 +112,7 @@ body {
       font-size: 0.75em !important;
       font-weight: normal !important;
     }
+
+    padding-bottom: 1em;
   }
 }
